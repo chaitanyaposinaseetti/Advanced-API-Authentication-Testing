@@ -175,6 +175,84 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Create Test Repository",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test 1: Status code is 201 (Created)\r",
+							"pm.test(\"Status code is 201 Created\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"// Test 2: Response contains repository name\r",
+							"pm.test(\"Response contains repository name\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('name');\r",
+							"    pm.expect(jsonData.name).to.eql('postman-api-test-repo');\r",
+							"});\r",
+							"\r",
+							"// Test 3: Repository has required fields\r",
+							"pm.test(\"Repository has required fields\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('id');\r",
+							"    pm.expect(jsonData).to.have.property('full_name');\r",
+							"    pm.expect(jsonData).to.have.property('html_url');\r",
+							"    pm.expect(jsonData).to.have.property('clone_url');\r",
+							"});\r",
+							"\r",
+							"// Test 4: Save repository name to environment\r",
+							"pm.test(\"Repository name saved to environment\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.environment.set(\"test_repo_name\", jsonData.name);\r",
+							"    pm.environment.set(\"test_repo_full_name\", jsonData.full_name);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"connection": true,
+					"accept-encoding": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"postman-api-test-repo\",\r\n  \"description\": \"Test repository created via Postman API automation\",\r\n  \"private\": false,\r\n  \"auto_init\": true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/user/repos",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"user",
+						"repos"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"auth": {
