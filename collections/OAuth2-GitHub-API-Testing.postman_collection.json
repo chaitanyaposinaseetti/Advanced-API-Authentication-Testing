@@ -316,6 +316,52 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Delete Test Repository",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test 1: Status code is 204 No Content\r",
+							"pm.test(\"Status code is 204 No Content\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});\r",
+							"\r",
+							"// Test 2: Response body is empty\r",
+							"pm.test(\"Response body is empty\", function () {\r",
+							"    pm.expect(pm.response.text()).to.be.empty;\r",
+							"});\r",
+							"\r",
+							"// Test 3: Clean up environment variables\r",
+							"pm.test(\"Environment variables cleaned up\", function () {\r",
+							"    pm.environment.unset(\"test_repo_name\");\r",
+							"    pm.environment.unset(\"test_repo_full_name\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/repos/{{username}}/{{test_repo_name}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"repos",
+						"{{username}}",
+						"{{test_repo_name}}"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"auth": {
