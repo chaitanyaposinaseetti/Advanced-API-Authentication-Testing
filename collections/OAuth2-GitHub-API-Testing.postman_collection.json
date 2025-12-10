@@ -253,6 +253,69 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Update Test Repository",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test 1: Status code is 200 OK\r",
+							"pm.test(\"Status code is 200 OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Test 2: Description was updated\r",
+							"pm.test(\"Description was updated successfully\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.description).to.include(\"Updated description\");\r",
+							"    pm.expect(jsonData.description).to.include(\"PATCH method\");\r",
+							"});\r",
+							"\r",
+							"// Test 3: Homepage was updated\r",
+							"pm.test(\"Homepage was updated\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.homepage).to.eql(\"https://github.com/chaitanyaposinaseetti\");\r",
+							"});\r",
+							"\r",
+							"// Test 4: Repository name unchanged\r",
+							"pm.test(\"Repository name remains the same\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.name).to.eql(\"postman-api-test-repo\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"description\": \"Updated description: API testing with Postman - demonstrating PATCH method\",\r\n  \"homepage\": \"https://github.com/chaitanyaposinaseetti\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/repos/{{username}}/{{test_repo_name}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"repos",
+						"{{username}}",
+						"{{test_repo_name}}"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"auth": {
