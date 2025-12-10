@@ -65,16 +65,150 @@
 					}
 				],
 				"url": {
-					"raw": "{{base_url}}/user",
+					"raw": "{{base_url}}/user?name=value&sort=updated&per-page =10&type=owner",
 					"host": [
 						"{{base_url}}"
 					],
 					"path": [
 						"user"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "value"
+						},
+						{
+							"key": "sort",
+							"value": "updated"
+						},
+						{
+							"key": "per-page ",
+							"value": "10"
+						},
+						{
+							"key": "type",
+							"value": "owner"
+						}
 					]
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Get User Repositeries",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test 1: Status code is 200\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Test 2: Response is an array\r",
+							"pm.test(\"Response is an array\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.be.an('array');\r",
+							"});\r",
+							"\r",
+							"// Test 3: Response contains repositories\r",
+							"pm.test(\"At least one repository returned\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.length).to.be.above(0);\r",
+							"});\r",
+							"\r",
+							"// Test 4: Each repo has required fields\r",
+							"pm.test(\"Repositories have required fields\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    jsonData.forEach(function(repo) {\r",
+							"        pm.expect(repo).to.have.property('name');\r",
+							"        pm.expect(repo).to.have.property('full_name');\r",
+							"        pm.expect(repo).to.have.property('private');\r",
+							"        pm.expect(repo).to.have.property('html_url');\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/user/repos?sort=updated&per_page=10&type=owner",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"user",
+						"repos"
+					],
+					"query": [
+						{
+							"key": "sort",
+							"value": "updated"
+						},
+						{
+							"key": "per_page",
+							"value": "10"
+						},
+						{
+							"key": "type",
+							"value": "owner"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{github_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
 		}
 	]
 }
